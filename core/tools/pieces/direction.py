@@ -1,0 +1,2 @@
+class PieceDirection:
+    pass

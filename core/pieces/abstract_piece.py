@@ -1,22 +1,7 @@
 from abc import ABC
-from core.tools import Position, Path
 from os import getcwd
-
-
-class PieceColor:
-    pass
-
-
-class PieceIsKilled:
-    pass
-
-
-class PieceDirection:
-    pass
-
-
-class PieceId:
-    pass
+from ..tools import Position, Path
+from ..tools.pieces import PieceColor, PieceDirection, PieceId, PieceIsKilled
 
 
 class AbstractPieces(ABC):
