@@ -10,7 +10,7 @@ class AbstractPieces(ABC):
         self.color: PieceColor = PieceColor(color)
         self.direction: PieceDirection = PieceDirection(direction)
         self.picture_path: Path = Path(f"{getcwd()}\\media\\images\\pieces\\{str(self.color)}")
-        self.is_killed: PieceIsKilled = PieceIsKilled()
+        self.is_killed: PieceIsKilled = PieceIsKilled(False)
         self.id: PieceId = PieceId()
 
 
