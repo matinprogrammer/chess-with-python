@@ -13,7 +13,7 @@ class PieceColor:
     @color.setter
     def color(self, value: str) -> None:
         lover_value = value.lower()
-        if lover_value not in ["left", "right"]:
+        if lover_value not in ["white", "black"]:
             raise ColorError(f"you have set wrong color. your color is: {value}")
         self.color = lover_value
 
