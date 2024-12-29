@@ -19,12 +19,12 @@ class PieceId:
 
 
 class AbstractPieces(ABC):
-    def __init__(self) -> None:
-        self.position: Position = Position()
+    def __init__(self, pos_x: int, pos_y: int) -> None:
+        self.position: Position = Position(pos_x, pos_y)
         self.picture_path: Path = Path()
         self.color: PieceColor = PieceColor()
         self.is_killed: PieceIsKilled = PieceIsKilled()
         self.direction: PieceDirection = PieceDirection()
         self.id: PieceId = PieceId()
 
-    
+
