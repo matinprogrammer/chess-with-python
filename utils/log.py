@@ -70,4 +70,5 @@ def function_logger(func: Callable):
     return wrapper
 
 
-core_logger = create_logger("core", "logs/core.log", logger_level=logging.DEBUG)
+core_logger = create_logger("core", "logs/core.log")
+windows_gui_logger = create_logger("windows_gui", "logs/windows_gui.log")

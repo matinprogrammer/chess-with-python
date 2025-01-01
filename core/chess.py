@@ -1,7 +1,8 @@
 from .board import Board
 from .history import History
-from .pieces import King, PieceRequest
+from .pieces import King, PieceRequest, AbstractPiece
 from .tools import Turn
+from typing import Union
 from utils.log import core_logger
 
 
@@ -11,6 +12,10 @@ class Chess:
         self.turn = Turn(1)
         self.history: History = History()
         self.current_piece_request: PieceRequest = PieceRequest()
+
+        self.game_start = True
+        self.is_check = False
+        self.is_check_mate = False
 
         # log
         core_logger.info("Chess initialised")

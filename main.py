@@ -1,4 +1,4 @@
-from utils.log import stop_logging_mock
 from core import Chess
+from GUIs.windows import WindowsGui
 
-Chess()
+WindowsGui(Chess())
