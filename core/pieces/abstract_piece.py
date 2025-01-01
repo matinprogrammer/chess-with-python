@@ -2,13 +2,13 @@ from abc import ABC, abstractmethod
 from os import getcwd
 from ..tools import Position, Path
 from ..tools.pieces import PieceColor, PieceDirection, PieceId, PieceIsKilled, PieceIsMoved
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 from .piece_request import PieceRequest
 import itertools
 
 
 class AbstractPiece(ABC):
-    def __init__(self, color: str, pos_x: int, pos_y: int, direction: str) -> None:
+    def __init__(self, color: str, pos_x: int, pos_y: int, direction: Union[str, None]) -> None:
         self.position: Position = Position(pos_x, pos_y)
         self.color: PieceColor = PieceColor(color)
         self.direction: PieceDirection = PieceDirection(direction)
