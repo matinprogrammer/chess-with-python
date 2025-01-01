@@ -20,7 +20,7 @@ class AbstractPiece(ABC):
         self.id: PieceId = PieceId()
 
         # log
-        core_logger.info(f"Piece {self.__class__.__name__} initialised\n")
+        core_logger.info(f"Piece {self.__class__.__name__} initialised")
 
     def get_real_moves(self, pieces: Dict[int, 'AbstractPiece']) -> PieceRequest:
         self.check_valid_pieces(pieces)

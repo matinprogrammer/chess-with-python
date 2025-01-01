@@ -1,8 +1,9 @@
-import logging, os
+import logging
+import os
 from functools import wraps
-from typing import Callable, Iterable
-from unittest.mock import patch
+from typing import Callable
 from unittest import TestCase
+from unittest.mock import patch
 
 
 class CustomFormatter(logging.Formatter):
