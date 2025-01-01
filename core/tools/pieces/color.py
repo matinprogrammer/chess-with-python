@@ -17,5 +17,9 @@ class PieceColor:
             raise ColorError(f"you have set wrong color. your color is: {value}")
         self.color = lover_value
 
+    @property
+    def opponent_color(self) -> str:
+        return "white" if self.color == "black" else "black"
+
     def __str__(self):
         return self.color
