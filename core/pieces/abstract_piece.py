@@ -1,12 +1,14 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from os import getcwd
 from ..tools import Position, Path
 from ..tools.pieces import PieceColor, PieceDirection, PieceId, PieceIsKilled, PieceIsMoved
-from typing import Dict
+from typing import Dict, List, Optional
+from .piece_request import PieceRequest
+import itertools
 
 
 class AbstractPiece(ABC):
-    def __init__(self, pos_x: int, pos_y: int, color: str, direction: str) -> None:
+    def __init__(self, color: str, pos_x: int, pos_y: int, direction: str) -> None:
         self.position: Position = Position(pos_x, pos_y)
         self.color: PieceColor = PieceColor(color)
         self.direction: PieceDirection = PieceDirection(direction)
@@ -15,9 +17,58 @@ class AbstractPiece(ABC):
         self.is_move = PieceIsMoved(False)
         self.id: PieceId = PieceId()
 
-    @property
-    def opponent_color(self) -> str:
-        return self.color.opponent_color
+    def get_real_moves(self, pieces: Dict[int, 'AbstractPiece']) -> PieceRequest:
+        self.check_valid_pieces(pieces)
+        moves: List[Optional[int]] = []
+        for align_moves in self.get_all_moves():
+            for move in align_moves:
+                if move not in pieces.keys():
+                    moves.append(move)
+                else:
+                    break
+
+        return PieceRequest(
+            piece=self,
+            moves=moves,
+            move_from_position=list(itertools.repeat(self.position.get_real_position(), len(moves))),
+            move_to_position=moves
+        )
+
+    def get_real_attack(self, pieces_color: Dict[str, Dict[int, 'AbstractPiece']]) -> PieceRequest:
+        colors = {"white": 1, "black": 1}
+        for color in pieces_color.keys():
+            if color in colors.keys():
+                colors[color] -= 1
+
+        if not all([color == 0 for color in colors.values()]):
+            raise ValueError("pieces_color keys must be white and black")
+
+        self.check_valid_pieces({**pieces_color["white"], **pieces_color["white"]})
+
+        attacks: Optional[List[int], List] = []
+        attack_pieces: List['AbstractPiece'] = []
+
+        for align_moves in self.get_all_moves():
+            for move in align_moves:
+                if move in pieces_color[str(self.color)].keys():
+                    break
+
+                if move in pieces_color[self.color.opponent].keys():
+                    attacks.append(move)
+                    attack_pieces.append(pieces_color[self.color.opponent][move])
+                    break
+
+        return PieceRequest(
+            piece=self,
+            oppoonent_pieces=attack_pieces,
+            attacks=attacks,
+            attack_from_position=list(itertools.repeat(self.position.get_real_position(), len(attacks))),
+            attack_to_position=attacks
+        )
+
+    @abstractmethod
+    def get_all_moves(self) -> List[List[int]]:
+        pass
 
     @staticmethod
     def check_valid_pieces(pieces: Dict[int, 'AbstractPiece']) -> None:
@@ -27,3 +78,19 @@ class AbstractPiece(ABC):
         for piece_key, piece_value in pieces.items():
             if piece_key != piece_value.position.get_real_position():
                 raise ValueError(f"pieces key must be piece real position")
+
+    def __repr__(self) -> str:
+        return (
+            f"Piece {self.__class__.__name__}"
+            f"(color={self.color}, "
+            f"pos_x={self.position.x}, "
+            f"pos_x={self.position.x}, "
+            f"picture_path={str(self.picture_path)}, "
+            f"is_killed={self.is_killed})"
+        )
+
+    def __str__(self) -> str:
+        return (
+            f"price {self.color} {self.__class__.__name__} in {self.position.x}X{self.position.y} "
+            f"{'died' if self.is_killed else 'alive'}"
+        )

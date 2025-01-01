@@ -8,14 +8,17 @@ class PieceDirection:
 
     @property
     def direction(self) -> str:
-        return self.direction
+        return self._direction
 
     @direction.setter
     def direction(self, value: str) -> None:
-        lover_value = value.lower()
-        if lover_value not in ["left", "right"]:
-            raise DirectionError(f"you have set wrong direction. your direction is: {value}")
-        self.direction = lover_value
+        if value is not None:
+            lover_value = value.lower()
+            if lover_value not in ["left", "right"]:
+                raise DirectionError(f"you have set wrong direction. your direction is: {value}")
+            self._direction = lover_value
+        else:
+            self._direction = None
 
     def __str__(self):
-        return self.direction
+        return self._direction

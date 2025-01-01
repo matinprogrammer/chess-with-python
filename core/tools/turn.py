@@ -12,7 +12,9 @@ class Turn:
 
     @turn_number.setter
     def turn_number(self, value: str) -> None:
-        raise TurnError(f"you can't assign turn number")
+        if value < 1:
+            raise TurnError("you can't assign less than 1")
+        self._turn_number = value
 
     @property
     def turn_str(self) -> str:

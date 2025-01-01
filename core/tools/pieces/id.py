@@ -11,8 +11,10 @@ class PieceId:
 
     @property
     def piece_id(self):
-        return self.piece_id
+        return self._piece_id
 
     @piece_id.setter
     def piece_id(self, value: int):
-        raise PieceIdError("you can't assign a piece_id")
+        if value < 1:
+            raise PieceIdError("you can't assign less than 1")
+        self._piece_id = value

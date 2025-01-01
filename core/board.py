@@ -10,11 +10,11 @@ class Board:
         self.pwl_knight = Knight("white", 1, 2, "left")
         self.pwr_bishop = Bishop("white", 1, 6, "right")
         self.pwl_bishop = Bishop("white", 1, 3, "left")
-        self.pw_king = King("white", 1, 5)
-        self.pw_queen = Queen("white", 1, 4)
+        self.pw_king = King("white", 1, 5, None)
+        self.pw_queen = Queen("white", 1, 4, None)
         self.pw_pawns = []
         for i in range(1, 9):
-            self.pw_pawns.append(WPawn(i, "white", 2, i))
+            self.pw_pawns.append(WPawn(i, "white", 2, i, None))
 
         self.pbr_rook = Rook("black", 8, 8, "right")
         self.pbl_rook = Rook("black", 8, 1, "left")
@@ -22,11 +22,11 @@ class Board:
         self.pbl_knight = Knight("black", 8, 2, "left")
         self.pbr_bishop = Bishop("black", 8, 6, "right")
         self.pbl_bishop = Bishop("black", 8, 3, "left")
-        self.pb_king = King("black", 8, 5)
-        self.pb_queen = Queen("black", 8, 4)
+        self.pb_king = King("black", 8, 5, None)
+        self.pb_queen = Queen("black", 8, 4, None)
         self.pb_pawns = []
         for i in range(1, 9):
-            self.pb_pawns.append(BPawn(i, "black", 7, i))
+            self.pb_pawns.append(BPawn(i, "black", 7, i, None))
 
     @property
     def white_pieces(self) -> List[AbstractPiece]:

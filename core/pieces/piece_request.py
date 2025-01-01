@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field, replace
 from typing import Union, List, Dict, Optional, Tuple
-from .abstract_piece import AbstractPiece
 from ..tools.position import Position, PositionError
 from utils.validate import is_instance_list
 
@@ -14,9 +13,9 @@ class PieceRequest:
     """
     this class is returned by get_real_move and get_real_attack of pieces
     """
-    piece: AbstractPiece = None
-    oppoonent_pieces: List[AbstractPiece] = field(default_factory=list)
-    castle_rooks: Union[None, Dict[int, AbstractPiece]] = None
+    piece: 'AbstractPiece' = None
+    oppoonent_pieces: List['AbstractPiece'] = field(default_factory=list)
+    castle_rooks: Union[None, Dict[int, 'AbstractPiece']] = None
     moves: List[Optional[int]] = field(default_factory=list)
     attacks: List[Optional[int]] = field(default_factory=list)
     move_from_position: List[int] = field(default_factory=list)
@@ -64,18 +63,18 @@ class PieceRequest:
 
     def validate_property(self) -> bool:
         # validate piece
-        if self.piece and not isinstance(self.piece, AbstractPiece):
+        if self.piece and not isinstance(self.piece, 'AbstractPiece'):
             raise PieceRequestError("Piece is not an AbstractPieces")
 
         # validate oppoonent_pieces
         if self.oppoonent_pieces:
-            if not is_instance_list(self.oppoonent_pieces, AbstractPiece):
+            if not is_instance_list(self.oppoonent_pieces, 'AbstractPiece'):
                 raise PieceRequestError(f"opponent piece is not an AbstractPieces")
 
         # validate castle_rooks
         if self.castle_rooks:
             for piece_position, piece in self.castle_rooks.items():
-                if not isinstance(piece, AbstractPiece):
+                if not isinstance(piece, 'AbstractPiece'):
                     raise PieceRequestError(f"piece in castle_rooks {piece} is not an AbstractPieces")
                 if not isinstance(piece_position, int):
                     raise PieceRequestError("piece_id in castle_rooks is not and integer")
