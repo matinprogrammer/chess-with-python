@@ -1,3 +1,6 @@
+from utils.log import core_logger
+
+
 class DirectionError(Exception):
     pass
 
@@ -5,6 +8,9 @@ class DirectionError(Exception):
 class PieceDirection:
     def __init__(self, direction: str):
         self.direction: str = direction
+
+        # log
+        core_logger.debug(f"PieceDirection {self.direction} initialised")
 
     @property
     def direction(self) -> str:

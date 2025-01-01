@@ -1,4 +1,5 @@
 from typing import Union, Tuple
+from utils.log import core_logger
 
 
 class PositionError(ValueError):
@@ -25,6 +26,9 @@ class Position:
             self.x, self.y = self.get_x_y_from_position(pos_x)
 
         self.last_position: Union[None, Tuple[int, int]] = None
+
+        # log
+        core_logger.debug(f"Position {self.x}, {self.y} initialised")
 
     def get_x_y(self) -> Tuple[int, int]:
         return self.x, self.y

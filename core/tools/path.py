@@ -1,6 +1,12 @@
+from utils.log import core_logger
+
+
 class Path:
     def __init__(self, path: str) -> None:
         self._path = path
+
+        # log
+        core_logger.debug(f"Path {self.path} initialized")
 
     @property
     def path(self) -> str:
@@ -15,6 +21,7 @@ class Path:
     def __truediv__(self, other: str) -> str:
         if not isinstance(other, str):
             raise ValueError(f"in divide assignment must be string")
+        core_logger.debug(f"Path set to {self.path + other}")
         return self.path + other
 
     def __str__(self) -> str:

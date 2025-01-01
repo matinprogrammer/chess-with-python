@@ -69,4 +69,4 @@ def function_logger(func: Callable):
     return wrapper
 
 
-core_logger = create_logger("core", "logs/core.log")
+core_logger = create_logger("core", "logs/core.log", logger_level=logging.DEBUG)

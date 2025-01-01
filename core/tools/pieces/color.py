@@ -1,3 +1,6 @@
+from utils.log import core_logger
+
+
 class ColorError(Exception):
     pass
 
@@ -9,6 +12,9 @@ class OpponentColorError(Exception):
 class PieceColor:
     def __init__(self, color: str):
         self.color: str = color
+
+        # log
+        core_logger.debug(f"PieceColor {self.color} initialised")
 
     def set(self, value: str) -> None:
         self.color = value

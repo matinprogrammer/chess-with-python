@@ -5,6 +5,7 @@ from ..tools.pieces import PieceColor, PieceDirection, PieceId, PieceIsKilled, P
 from typing import Dict, List, Optional, Union
 from .piece_request import PieceRequest
 import itertools
+from utils.log import core_logger
 
 
 class AbstractPiece(ABC):
@@ -12,10 +13,13 @@ class AbstractPiece(ABC):
         self.position: Position = Position(pos_x, pos_y)
         self.color: PieceColor = PieceColor(color)
         self.direction: PieceDirection = PieceDirection(direction)
-        self.picture_path: Path = Path(f"{getcwd()}\\media\\images\\pieces\\{str(self.color)}")
+        self.picture_path: Path = Path(f"{getcwd()}\\media\\images\\pieces\\{str(self.color)}_")
         self.is_killed: PieceIsKilled = PieceIsKilled(False)
         self.is_move = PieceIsMoved(False)
         self.id: PieceId = PieceId()
+
+        # log
+        core_logger.info(f"Piece {self.__class__.__name__} initialised")
 
     def get_real_moves(self, pieces: Dict[int, 'AbstractPiece']) -> PieceRequest:
         self.check_valid_pieces(pieces)

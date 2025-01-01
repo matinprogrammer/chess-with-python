@@ -1,3 +1,6 @@
+from utils.log import core_logger
+
+
 class TurnError(Exception):
     pass
 
@@ -5,6 +8,9 @@ class TurnError(Exception):
 class Turn:
     def __init__(self, turn_number: int):
         self.turn_number: int = turn_number
+
+        # log
+        core_logger.debug(f"Turn {self.turn_number} initialised")
 
     @property
     def turn_number(self) -> str:

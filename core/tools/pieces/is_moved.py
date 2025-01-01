@@ -1,3 +1,6 @@
+from utils.log import core_logger
+
+
 class IsMovedError(Exception):
     pass
 
@@ -5,6 +8,9 @@ class IsMovedError(Exception):
 class PieceIsMoved:
     def __init__(self, is_moved: bool):
         self.is_moved: bool = is_moved
+
+        # log
+        core_logger.debug(f"PieceIsMoved: {self.is_moved} initialised")
 
     def set(self, value: bool) -> None:
         self.is_moved = value

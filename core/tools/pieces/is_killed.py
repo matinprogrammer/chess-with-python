@@ -1,3 +1,6 @@
+from utils.log import core_logger
+
+
 class IsKilledError(Exception):
     pass
 
@@ -5,6 +8,9 @@ class IsKilledError(Exception):
 class PieceIsKilled:
     def __init__(self, is_killed: bool):
         self.is_killed: bool = is_killed
+
+        # log
+        core_logger.debug(f"PieceIsKilled {self.is_killed} initialised")
 
     def set(self, value: bool) -> None:
         self.is_killed = value

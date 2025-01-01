@@ -1,10 +1,12 @@
 from typing import List, Union
 from .history_turn import HistoryTurn
+from utils.log import core_logger
 
 
 class History:
     def __init__(self):
         self._history: List[HistoryTurn] = []
+        core_logger.info("History initialised")
 
     def append(self, history: HistoryTurn) -> None:
         self._history.append(history)

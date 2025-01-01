@@ -1,5 +1,6 @@
 from .pieces import Rook, Knight, Bishop, King, Queen, WPawn, BPawn, AbstractPiece
 from typing import List
+from utils.log import core_logger
 
 
 class Board:
@@ -27,6 +28,9 @@ class Board:
         self.pb_pawns = []
         for i in range(1, 9):
             self.pb_pawns.append(BPawn(i, "black", 7, i, None))
+
+        # log
+        core_logger.info("Board initialised")
 
     @property
     def white_pieces(self) -> List[AbstractPiece]:

@@ -2,6 +2,7 @@ from dataclasses import dataclass, field, replace
 from typing import Union, List, Dict, Optional, Tuple
 from ..tools.position import Position, PositionError
 from utils.validate import is_instance_list
+from utils.log import core_logger
 
 
 class PieceRequestError(Exception):
@@ -29,6 +30,13 @@ class PieceRequest:
 
     def __post_init__(self):
         self.validate_property()
+
+        # log
+        property_str = "-"
+        for property_ in self.get_all_property():
+            if getattr(self, property_):
+                property_str += f"{property_}: {str(getattr(self, property_))}"
+        core_logger.info(f"PieceRequest with {str(property_str)} property initialised")
 
     @property
     def move_from_to_position(self) -> List[Tuple[int]]:

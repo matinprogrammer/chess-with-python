@@ -2,6 +2,8 @@ from ..tools import Position
 from ..pieces import AbstractPiece
 from dataclasses import dataclass
 from .move_status import MoveStatus
+from utils.log import core_logger
+from typing import List
 
 
 class TurnError(ValueError):
@@ -28,6 +30,16 @@ class HistoryTurn:
 
     def __post_init__(self):
         self.validate_property()
+
+        # log
+        property_str = "-"
+        for property_ in self.get_all_property():
+            if getattr(self, property_):
+                property_str += f"{property_}: {str(getattr(self, property_))}"
+        core_logger.info(f"HistoryTurn with {str(property_str)} property initialised")
+
+    def get_all_property(self) -> List[str]:
+        return list(vars(self))
 
     def validate_property(self):
         # validate turn_number

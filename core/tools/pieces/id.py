@@ -1,3 +1,6 @@
+from utils.log import core_logger
+
+
 class PieceIdError(Exception):
     pass
 
@@ -8,6 +11,9 @@ class PieceId:
     def __init__(self):
         self.piece_id = PieceId.id_counter
         PieceId.id_counter += 1
+
+        # log
+        core_logger.debug(f"PieceId {self.piece_id} initialised")
 
     @property
     def piece_id(self):

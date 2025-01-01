@@ -2,6 +2,7 @@ from .board import Board
 from .history import History
 from .pieces import King, PieceRequest
 from .tools import Turn
+from utils.log import core_logger
 
 
 class Chess:
@@ -10,6 +11,9 @@ class Chess:
         self.turn = Turn(1)
         self.history: History = History()
         self.current_piece_request: PieceRequest = PieceRequest()
+
+        # log
+        core_logger.info("Chess initialised")
 
     def set_data_to_null(self):
         self.current_piece_request = PieceRequest()
