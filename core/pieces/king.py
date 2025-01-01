@@ -7,10 +7,6 @@ import itertools
 
 
 class King(AbstractPiece):
-    def __init__(self, *args) -> None:
-        super().__init__(*args)
-        self.picture_path /= "king.png"
-
     def get_all_moves(self) -> List[List[int]]:
         moves = []
 

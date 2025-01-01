@@ -10,7 +10,6 @@ import itertools
 class Pawn(AbstractPiece, ABC):
     def __init__(self, pawn_id, *args) -> None:
         super().__init__(*args)
-        self.picture_path /= "pawn.png"
         self.id = pawn_id
 
 

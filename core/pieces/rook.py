@@ -4,10 +4,6 @@ from ..tools import Position
 
 
 class Rook(AbstractPiece):
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
-        self.picture_path /= "rook.png"
-
     def get_all_moves(self) -> List[List[int]]:
         moves = [[], [], [], []]
 

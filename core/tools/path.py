@@ -21,7 +21,6 @@ class Path:
     def __truediv__(self, other: str) -> str:
         if not isinstance(other, str):
             raise ValueError(f"in divide assignment must be string")
-        core_logger.debug(f"Path set to {self.path + other}")
         return self.path + other
 
     def __str__(self) -> str:

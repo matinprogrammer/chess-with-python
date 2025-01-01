@@ -4,10 +4,6 @@ from ..tools import Position
 
 
 class Queen(AbstractPiece):
-    def __init__(self, *args) -> None:
-        super().__init__(*args)
-        self.picture_path /= "queen.png"
-
     def get_all_moves(self) -> List[List[int]]:
         moves = [[], [], [], [], [], [], [], []]
 
