@@ -4,7 +4,7 @@ from ..tools import Position, Path
 from ..tools.pieces import PieceColor, PieceDirection, PieceId, PieceIsKilled, PieceIsMoved
 
 
-class AbstractPieces(ABC):
+class AbstractPiece(ABC):
     def __init__(self, pos_x: int, pos_y: int, color: str, direction: str) -> None:
         self.position: Position = Position(pos_x, pos_y)
         self.color: PieceColor = PieceColor(color)
