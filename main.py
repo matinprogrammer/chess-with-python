@@ -1,1 +1,1 @@
-from core.pieces import AbstractPiece, PieceRequest, PieceRequestError
+from core import Chess

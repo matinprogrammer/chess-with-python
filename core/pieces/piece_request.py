@@ -2,7 +2,7 @@ from dataclasses import dataclass, field, replace
 from typing import Union, List, Dict, Optional, Tuple
 from .abstract_piece import AbstractPiece
 from ..tools.position import Position, PositionError
-from utils.tools import is_instance_list
+from utils.validate import is_instance_list
 
 
 class PieceRequestError(Exception):
