@@ -6,6 +6,9 @@ class PieceIsKilled:
     def __init__(self, is_killed: bool):
         self.is_killed: bool = is_killed
 
+    def set(self, value: bool) -> None:
+        self.is_killed = value
+
     @property
     def is_killed(self) -> bool:
         return self._is_killed

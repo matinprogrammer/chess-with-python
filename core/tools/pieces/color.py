@@ -10,6 +10,9 @@ class PieceColor:
     def __init__(self, color: str):
         self.color: str = color
 
+    def set(self, value: str) -> None:
+        self.color = value
+
     @property
     def color(self) -> str:
         return self._color

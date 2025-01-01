@@ -6,6 +6,9 @@ class PieceIsMoved:
     def __init__(self, is_moved: bool):
         self.is_moved: bool = is_moved
 
+    def set(self, value: bool) -> None:
+        self.is_moved = value
+
     @property
     def is_moved(self) -> bool:
         return self._is_moved
