@@ -13,11 +13,11 @@ class Turn:
         core_logger.debug(f"Turn {self.turn_number} initialised")
 
     @property
-    def turn_number(self) -> str:
+    def turn_number(self) -> int:
         return self._turn_number
 
     @turn_number.setter
-    def turn_number(self, value: str) -> None:
+    def turn_number(self, value: int) -> None:
         if value < 1:
             raise TurnError("you can't assign less than 1")
         self._turn_number = value

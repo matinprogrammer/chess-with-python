@@ -32,11 +32,11 @@ class BPawn(Pawn):
         pos_x, pos_y = self.position.get_x_y()
 
         if pos := self.position.get_pos_or_false_by_x_y(pos_x - 1, pos_y + 1):
-            if pos in pieces_color[self.opponent_color].keys():
+            if pos in pieces_color[self.color.opponent].keys():
                 attacks.append(pos)
 
         if pos := self.position.get_pos_or_false_by_x_y(pos_x - 1, pos_y - 1):
-            if pos in pieces_color[self.opponent_color].keys():
+            if pos in pieces_color[self.color.opponent].keys():
                 attacks.append(pos)
 
         # enpassant
@@ -65,7 +65,7 @@ class BPawn(Pawn):
         return PieceRequest(
             attacks=attacks + enpassant_attacks,
             oppoonent_pieces=[
-                pieces_color[self.opponent_color].get(piece_position) for piece_position in attack_to_position
+                pieces_color[self.color.opponent].get(piece_position) for piece_position in attack_to_position
             ],
             is_enpassant=is_enpassant,
             attack_from_position=list(
@@ -128,7 +128,7 @@ class WPawn(Pawn):
         return PieceRequest(
             attacks=attacks + enpassant_attacks,
             oppoonent_pieces=[
-                pieces_color[self.opponent_color].get(piece_position) for piece_position in attack_to_position
+                pieces_color[self.color.opponent].get(piece_position) for piece_position in attack_to_position
             ],
             is_enpassant=is_enpassant,
             attack_from_position=list(
