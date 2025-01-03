@@ -28,5 +28,5 @@ class PieceIsKilled:
             raise IsKilledError(f"you have set wrong is_killed. your is_killed is: {value}")
         self._is_killed = value
 
-    def __str__(self):
-        return self._is_killed
+    def __str__(self) -> str:
+        return str(self._is_killed)

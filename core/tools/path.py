@@ -8,6 +8,9 @@ class Path:
         # log
         core_logger.debug(f"Path {self.path} initialized")
 
+    def get(self) -> str:
+        return self._path
+
     @property
     def path(self) -> str:
         return self._path

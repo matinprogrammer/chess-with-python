@@ -1,9 +1,23 @@
 from core import Position, AbstractPiece, Pawn, King, Queen, Rook, Bishop, Knight, Chess
 from typing import Union, List, Dict, Tuple
+from dataclasses import dataclass
 
 
 class InvalidAlgebraicNotation(ValueError):
     pass
+
+class InvalidMove(ValueError):
+    pass
+
+
+@dataclass
+class CmdRequest:
+    status_code: int
+    message: str
+    piece: AbstractPiece
+    which_piece_position: int
+    destination_move_position: int
+    is_attack: bool = False
 
 
 class CmdHandler:
@@ -29,13 +43,13 @@ class CmdHandler:
         except Exception as e:
             raise InvalidAlgebraicNotation("invalid piece input") from e
 
-        which_piece: Union[list, None] = None
+        which_piece_position: Union[str, None] = None
         if len(self.user_input) > 3:
             try:
                 if "x" in self.user_input:
-                    which_piece = self.user_input[1: -3]
+                    which_piece_position = self.user_input[1: -3]
                 else:
-                    which_piece = self.user_input[1: -2]
+                    which_piece_position = self.user_input[1: -2]
             except Exception as e:
                 raise InvalidAlgebraicNotation("invalid piece input") from e
 
@@ -46,49 +60,45 @@ class CmdHandler:
             is_attack = True
 
         try:
-            destination_move: str = self.user_input[-2:]
-            if not destination_move[0].isascii():
-                raise InvalidAlgebraicNotation(f"column input is wrong. column: {destination_move[0]}")
-            if not destination_move[1].isnumeric():
-                raise InvalidAlgebraicNotation(f"row input is wrong. row: {destination_move[1]}")
+            destination_move_x_y: str = self.user_input[-2:]
+            if not destination_move_x_y[0].isascii():
+                raise InvalidAlgebraicNotation(f"column input is wrong. column: {destination_move_x_y[0]}")
+            if not destination_move_x_y[1].isnumeric():
+                raise InvalidAlgebraicNotation(f"row input is wrong. row: {destination_move_x_y[1]}")
         except Exception as e:
             raise InvalidAlgebraicNotation(f"invalid destination move input") from e
 
-        return {"piece": piece, "which_piece": which_piece, "destination_move": destination_move,
-                "is_attack": is_attack}
+        return {"piece": piece, "which_piece_position": which_piece_position,
+                "destination_move_x_y": destination_move_x_y, "is_attack": is_attack}
 
-    def get_piece_move_with_code(self, chess: Chess) -> Tuple:
-        cell_id = 0
-        algebraic_notation = {}
-        result: Union[str, AbstractPiece] = "piece moved"
-        status_code = 0
+    def get_piece_move_with_code(self, chess: Chess) -> CmdRequest:
+        algebraic_notation: Dict = self.get_algebraic_notation()
 
-        try:
-            algebraic_notation: Dict = self.get_algebraic_notation()
-        except InvalidAlgebraicNotation as e:
-            result = f"invalid input {str(e)}"
-            status_code = 1
+        cell_id = Position.get_real_position_by_x_y(
+            int(algebraic_notation["destination_move_x_y"][1]),
+            self.charset_column[algebraic_notation["destination_move_x_y"][0]]
+        )
+        pieces_list = []
+        all_own_pieces: List[AbstractPiece] = chess.board.get_all_pieces_by_color()[chess.turn.turn_str].values()
+        for own_piece in all_own_pieces:
+            if isinstance(own_piece, self.pieces_short[algebraic_notation["piece"]]):
+                all_moves = own_piece.get_real_moves(chess.board.get_all_pieces()).moves
+                all_attacks = (own_piece.get_real_attack(chess.board.get_all_pieces_by_color())
+                               .attacks)
+                if (
+                        (not algebraic_notation["is_attack"] and cell_id in all_moves)
+                        or (algebraic_notation["is_attack"] and cell_id in all_attacks)
+                ):
+                    pieces_list.append(own_piece)
 
-        if status_code == 0:
-            cell_id = Position.get_real_position_by_x_y(
-                int(algebraic_notation["destination_move"][1]),
-                self.charset_column[algebraic_notation["destination_move"][0]]
-            )
-            pieces_list = []
-            all_own_pieces: List[AbstractPiece] = chess.board.get_all_pieces_by_color()[chess.turn].values()
-            for own_piece in all_own_pieces:
-                if isinstance(own_piece, self.pieces_short[algebraic_notation["piece"]]):
-                    all_moves = own_piece.get_real_moves(chess.board.get_all_pieces()).moves
-                    all_attacks = (own_piece.get_real_attack(chess.board.get_all_pieces_by_color())
-                                   .attacks)
-                    if (
-                            (not algebraic_notation["is_attack"] and cell_id in all_moves)
-                            or (algebraic_notation["is_attack"] and cell_id in all_attacks)
-                    ):
-                        pieces_list.append(own_piece)
+        if len(pieces_list) != 1:
+            raise InvalidMove("invalid input")
 
-            if len(pieces_list) == 1:
-                result = pieces_list[0]
-            else:
-                result = "invalid input"
-        return status_code, result, cell_id, algebraic_notation["is_attack"]
+        return CmdRequest(
+            status_code=0,
+            message="move successfully",
+            piece=pieces_list[0],
+            which_piece_position=algebraic_notation["which_piece_position"],
+            destination_move_position=cell_id,
+            is_attack=algebraic_notation["is_attack"]
+        )

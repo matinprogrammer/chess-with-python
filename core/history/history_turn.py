@@ -18,15 +18,15 @@ class HistoryTurn:
     to_position: Position
     move_status: MoveStatus
 
-    is_small_castling: bool
-    is_big_castling: bool
+    is_small_castling: bool = False
+    is_big_castling: bool = False
 
-    is_exchange: bool
-    is_attack: bool
-    is_check: bool
-    is_double_check: bool
-    is_stale_mate: bool
-    is_check_mate: bool
+    is_exchange: bool = False
+    is_attack: bool = False
+    is_check: bool = False
+    is_double_check: bool = False
+    is_stale_mate: bool = False
+    is_check_mate: bool = False
 
     def __post_init__(self):
         self.validate_property()
