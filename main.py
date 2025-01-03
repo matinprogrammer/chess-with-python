@@ -1,4 +1,6 @@
 from core import Chess
-from GUIs.windows import WindowsGui
+from windows_gui.main import WindowsGui
 
-WindowsGui(Chess())
+gui = WindowsGui(Chess())
+gui.create_chess_board()
+gui.show()

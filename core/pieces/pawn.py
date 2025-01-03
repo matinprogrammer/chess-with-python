@@ -19,7 +19,7 @@ class BPawn(Pawn):
         if pos := Position.get_pos_or_false_by_x_y(self.position.x - 1, self.position.y):
             moves[0].append(pos)
 
-        if not self.is_move:
+        if not self.is_move.get():
             if pos := Position.get_pos_or_false_by_x_y(self.position.x - 2, self.position.y):
                 moves[0].append(pos)
 
@@ -81,7 +81,7 @@ class WPawn(Pawn):
         if pos := Position.get_pos_or_false_by_x_y(self.position.x + 1, self.position.y):
             moves[0].append(pos)
 
-        if not self.is_move:
+        if not self.is_move.get():
             if pos := Position.get_pos_or_false_by_x_y(self.position.x + 2, self.position.y):
                 moves[0].append(pos)
 
@@ -94,11 +94,11 @@ class WPawn(Pawn):
         pos_x, pos_y = self.position.get_x_y()
 
         if pos := self.position.get_pos_or_false_by_x_y(pos_x + 1, pos_y + 1):
-            if pos in pieces_color[self.opponent_color].keys():
+            if pos in pieces_color[self.color.opponent].keys():
                 attacks.append(pos)
 
         if pos := self.position.get_pos_or_false_by_x_y(pos_x + 1, pos_y - 1):
-            if pos in pieces_color[self.opponent_color].keys():
+            if pos in pieces_color[self.color.opponent].keys():
                 attacks.append(pos)
 
         # enpassant

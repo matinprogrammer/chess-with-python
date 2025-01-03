@@ -15,6 +15,9 @@ class PieceIsMoved:
     def set(self, value: bool) -> None:
         self.is_moved = value
 
+    def get(self):
+        return self.is_moved
+
     @property
     def is_moved(self) -> bool:
         return self._is_moved

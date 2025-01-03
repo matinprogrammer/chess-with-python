@@ -33,9 +33,9 @@ class PieceRequest:
 
         # log
         property_str = "-"
-        for property_ in self.get_all_property():
+        for property_, value_ in self.get_all_attr_property().items():
             if getattr(self, property_):
-                property_str += f"{property_}: {str(getattr(self, property_))}"
+                property_str += f"{property_}: {str(value_)}"
         core_logger.info(f"PieceRequest with {str(property_str)} property initialised")
 
     @property
@@ -60,29 +60,31 @@ class PieceRequest:
         """
         return replace(self, **kwargs)
 
-    def get_all_property(self) -> List[str]:
-        properties = vars(self)
+    def get_all_attr_property(self) -> Dict:
+        properties = dict(vars(self))
         # Include properties defined with @property decorator
         properties.update({
             "move_from_to_position": self.move_from_to_position,
             "attack_from_to_position": self.attack_from_to_position,
         })
-        return list(properties)
+        return properties
 
     def validate_property(self) -> bool:
+        from .abstract_piece import AbstractPiece
+
         # validate piece
-        if self.piece and not isinstance(self.piece, 'AbstractPiece'):
+        if self.piece and not isinstance(self.piece, AbstractPiece):
             raise PieceRequestError("Piece is not an AbstractPieces")
 
         # validate oppoonent_pieces
         if self.oppoonent_pieces:
-            if not is_instance_list(self.oppoonent_pieces, 'AbstractPiece'):
+            if not is_instance_list(self.oppoonent_pieces, AbstractPiece):
                 raise PieceRequestError(f"opponent piece is not an AbstractPieces")
 
         # validate castle_rooks
         if self.castle_rooks:
             for piece_position, piece in self.castle_rooks.items():
-                if not isinstance(piece, 'AbstractPiece'):
+                if not isinstance(piece, AbstractPiece):
                     raise PieceRequestError(f"piece in castle_rooks {piece} is not an AbstractPieces")
                 if not isinstance(piece_position, int):
                     raise PieceRequestError("piece_id in castle_rooks is not and integer")
@@ -133,9 +135,25 @@ class PieceRequest:
 
         return True
 
+    def __add__(self, other) -> 'PieceRequest':
+        if not isinstance(other, PieceRequest):
+            raise PieceRequestError("you cant add piece_request with other data structure except piece_request")
+
+        for property_, value_ in vars(self).items():
+            if property_ == "piece":
+                setattr(self, property_, value_ or getattr(other, property_))
+
+            if isinstance(value_, list):
+                value_.extend(getattr(other, property_))
+                setattr(self, property_, value_)
+
+            if isinstance(value_, bool):
+                setattr(self, property_, value_ or getattr(other, property_))
+        return self
+
     def __str__(self) -> str:
         property_list = []
-        for property_ in self.get_all_property():
+        for property_, value_ in self.get_all_attr_property().items():
             property_list.append(f"{property_.replace("_", " ")}: "
-                                 f"{str(getattr(self, property_))}")
+                                 f"{str(value_)}")
         return "\n".join(property_list)

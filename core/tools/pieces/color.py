@@ -19,6 +19,9 @@ class PieceColor:
     def set(self, value: str) -> None:
         self.color = value
 
+    def get(self) -> str:
+        return self.color
+
     @property
     def color(self) -> str:
         return self._color

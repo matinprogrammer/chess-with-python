@@ -68,10 +68,10 @@ class Board:
         ]
 
     def get_white_pieces(self):
-        return {piece.position.get_real_position(): piece for piece in self.white_pieces if not piece.is_killed}
+        return {piece.position.get_real_position(): piece for piece in self.white_pieces if not piece.is_killed.get()}
 
     def get_black_pieces(self):
-        return {piece.position.get_real_position(): piece for piece in self.black_pieces if not piece.is_killed}
+        return {piece.position.get_real_position(): piece for piece in self.black_pieces if not piece.is_killed.get()}
 
     def get_all_pieces(self):
         return {**self.get_white_pieces(), **self.get_black_pieces()}

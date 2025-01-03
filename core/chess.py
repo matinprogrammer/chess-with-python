@@ -15,22 +15,20 @@ class Chess:
 
         self.game_start = True
         self.is_check = False
+        self.check_position: Union[None, int] = None
         self.is_check_mate = False
 
         # log
         core_logger.info("Chess initialised")
 
-    def set_data_to_null(self):
-        self.current_piece_request = PieceRequest()
-
     def get_own_king(self) -> King:
-        if self.turn_str == "white":
+        if self.turn.turn_str == "white":
             return self.board.pw_king
         else:
             return self.board.pb_king
 
     def get_opponent_king(self) -> King:
-        if self.turn_str == "white":
+        if self.turn.turn_str == "white":
             return self.board.pb_king
         else:
             return self.board.pw_king
@@ -39,4 +37,4 @@ class Chess:
         return f"{self.__class__.__name__}()"
 
     def __str__(self) -> str:
-        return f"board in turn {self.turn_str}"
+        return f"board in turn {self.turn.turn_str}"

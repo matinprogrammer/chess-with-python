@@ -97,5 +97,5 @@ class AbstractPiece(ABC):
     def __str__(self) -> str:
         return (
             f"price {self.color} {self.__class__.__name__} in {self.position.x}X{self.position.y} "
-            f"{'died' if self.is_killed else 'alive'}"
+            f"{'died' if self.is_killed.get() else 'alive'}"
         )

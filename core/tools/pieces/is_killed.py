@@ -15,6 +15,9 @@ class PieceIsKilled:
     def set(self, value: bool) -> None:
         self.is_killed = value
 
+    def get(self) -> bool:
+        return self.is_killed
+
     @property
     def is_killed(self) -> bool:
         return self._is_killed
