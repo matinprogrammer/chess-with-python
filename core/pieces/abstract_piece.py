@@ -84,6 +84,15 @@ class AbstractPiece(ABC):
             if piece_key != piece_value.position.get_real_position():
                 raise ValueError(f"pieces key must be piece real position")
 
+    def move(self, move: int) -> None:
+        self.position.set_position(move)
+
+    def moved(self):
+        self.is_move.set(True)
+
+    def kill(self):
+        self.is_killed.set(True)
+
     def __repr__(self) -> str:
         return (
             f"Piece {self.__class__.__name__}"
@@ -91,7 +100,7 @@ class AbstractPiece(ABC):
             f"pos_x={self.position.x}, "
             f"pos_x={self.position.x}, "
             f"picture_path={str(self.picture_path)}, "
-            f"is_killed={self.is_killed})"
+            f"is_killed={str(self.is_killed)})"
         )
 
     def __str__(self) -> str:
