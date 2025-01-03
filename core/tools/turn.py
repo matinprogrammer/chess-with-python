@@ -26,6 +26,10 @@ class Turn:
     def turn_str(self) -> str:
         return "white" if self._turn_number % 2 == 1 else "black"
 
+    @property
+    def reverse_turn_str(self) -> str:
+        return "black" if self._turn_number % 2 == 1 else "white"
+
     def increase_turn(self) -> None:
         self._turn_number += 1
 

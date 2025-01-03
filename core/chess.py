@@ -2,7 +2,7 @@ from .board import Board
 from .history import History
 from .pieces import King, PieceRequest, AbstractPiece
 from .tools import Turn
-from typing import Union
+from typing import Union, Dict
 from utils.log import core_logger
 import itertools
 
@@ -23,6 +23,12 @@ class Chess:
 
         # log
         core_logger.info("Chess initialised")
+
+    def get_own_pieces(self) -> Dict[int, AbstractPiece]:
+        return self.board.get_all_pieces_by_color()[self.turn.turn_str]
+
+    def get_opponent_pieces(self) -> Dict[int, AbstractPiece]:
+        return self.board.get_all_pieces_by_color()[self.turn.reverse_turn_str]
 
     def get_own_king(self) -> King:
         if self.turn.turn_str == "white":

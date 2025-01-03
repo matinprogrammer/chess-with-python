@@ -6,6 +6,7 @@ from dataclasses import dataclass
 class InvalidAlgebraicNotation(ValueError):
     pass
 
+
 class InvalidMove(ValueError):
     pass
 
@@ -79,25 +80,56 @@ class CmdHandler:
             self.charset_column[algebraic_notation["destination_move_x_y"][0]]
         )
         pieces_list = []
-        all_own_pieces: List[AbstractPiece] = chess.board.get_all_pieces_by_color()[chess.turn.turn_str].values()
-        for own_piece in all_own_pieces:
+        for own_piece in chess.get_own_pieces().values():
             if isinstance(own_piece, self.pieces_short[algebraic_notation["piece"]]):
                 all_moves = own_piece.get_real_moves(chess.board.get_all_pieces()).moves
-                all_attacks = (own_piece.get_real_attack(chess.board.get_all_pieces_by_color())
-                               .attacks)
+                all_attacks = own_piece.get_real_attack(chess.board.get_all_pieces_by_color()).attacks
+
                 if (
                         (not algebraic_notation["is_attack"] and cell_id in all_moves)
                         or (algebraic_notation["is_attack"] and cell_id in all_attacks)
                 ):
                     pieces_list.append(own_piece)
 
+        piece: Union[None, AbstractPiece] = None
+
         if len(pieces_list) != 1:
-            raise InvalidMove("invalid input")
+            which_piece_position: str = algebraic_notation["which_piece_position"]
+            row = None
+            column = None
+
+            if not which_piece_position:
+                raise InvalidMove("invalid input you can move multi piece")
+
+            if len(which_piece_position) == 2:
+                row = int(which_piece_position[1])
+                column = self.charset_column[which_piece_position[0]]
+            elif which_piece_position.isnumeric():
+                row = int(which_piece_position)
+            else:
+                column = self.charset_column[which_piece_position]
+
+            for piece_ in pieces_list:
+                if (row is not None) and piece_.position.x == row:
+                    if (column is not None) and piece_.position.y != column:
+                        continue
+                    if piece is not None:
+                        raise InvalidMove("invalid input you can move multi piece")
+                    piece = piece_
+
+                elif (column is not None) and piece_.position.y == column:
+                    if (row is not None) and piece_.position.x != row:
+                        continue
+                    if piece is not None:
+                        raise InvalidMove("invalid input you can move multi piece")
+                    piece = piece_
+        else:
+            piece = pieces_list[0]
 
         return CmdRequest(
             status_code=0,
             message="move successfully",
-            piece=pieces_list[0],
+            piece=piece,
             which_piece_position=algebraic_notation["which_piece_position"],
             destination_move_position=cell_id,
             is_attack=algebraic_notation["is_attack"]

@@ -35,6 +35,9 @@ class WindowsGui:
         self.pieces_request: List[PieceRequest] = []
         self.data: PieceRequest = PieceRequest()
 
+        input_thread = threading.Thread(target=self.get_input, daemon=True, args=[None])
+        input_thread.start()
+
     def set_data_to_null(self):
         self.data = PieceRequest()
 
@@ -67,9 +70,6 @@ class WindowsGui:
         self.main_frame = gui_board
         self.set_chess_board_colors()
 
-        input_thread = threading.Thread(target=self.get_input, daemon=True, args=[None])
-        input_thread.start()
-
     def get_input(self, result: Union[str, None]):
         while True:
             if result is not None:
@@ -79,6 +79,11 @@ class WindowsGui:
 
             if user_input == "q":
                 self.window.destroy()
+
+            if user_input == "r":
+                self.restart_game()
+                continue
+
             try:
                 cmd_request: CmdRequest = CmdHandler(user_input).get_piece_move_with_code(self.chess)
             except (InvalidMove, InvalidAlgebraicNotation) as e:
@@ -86,8 +91,11 @@ class WindowsGui:
                 continue
 
             self.set_data_to_null()
-            self.set_moves_attacks(cmd_request.piece)
-            self.set_piece_move(self.data, cmd_request.destination_move_position, is_attack=cmd_request.is_attack)
+            if cmd_request.piece is not None:
+                self.set_moves_attacks(cmd_request.piece)
+                self.set_piece_move(self.data, cmd_request.destination_move_position, is_attack=cmd_request.is_attack)
+            else:
+                print("invalid input")
 
     def on_cell_click(self, event, cell_id: int, piece: Union[None, AbstractPiece]):
         all_pieces_data = ""
@@ -276,7 +284,7 @@ class WindowsGui:
                 color = self.cell_colors["normal"][sum(Position.get_x_y_from_position(label.id)) % 2]
             label.config(bg=color)
 
-    def restart_game(self, event):
+    def restart_game(self, event=None) -> None:
         for widget in self.window.winfo_children():
             widget.destroy()
         self.cells = []
