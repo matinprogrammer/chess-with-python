@@ -43,7 +43,6 @@ class King(AbstractPiece):
 
         is_big_castling = False
         is_small_castling = False
-        rooks: Dict[int, AbstractPiece] = {}
 
         moves: List[Optional[int]] = []
         for align_moves in self.get_all_moves():
@@ -61,7 +60,6 @@ class King(AbstractPiece):
             if isinstance(right_rook, Rook) and not right_rook.is_move.get():
                 if pieces.get(king_real_position + 1) is None and pieces.get(king_real_position + 2) is None:
                     moves.append(king_real_position + 2)
-                    rooks[right_rook.position.get_real_position()] = right_rook
                     is_small_castling = True
 
             if isinstance(left_rook, Rook) and not left_rook.is_move.get():
@@ -71,7 +69,6 @@ class King(AbstractPiece):
                         and pieces.get(king_real_position - 2) is None
                 ):
                     moves.append(king_real_position - 2)
-                    rooks[left_rook.position.get_real_position()] = left_rook
                     is_big_castling = True
         # end castling
         return PieceRequest(
@@ -81,5 +78,4 @@ class King(AbstractPiece):
             moves=moves,
             move_from_position=list(itertools.repeat(self.position.get_real_position(), len(moves))),
             move_to_position=moves,
-            castle_rooks=rooks
         )

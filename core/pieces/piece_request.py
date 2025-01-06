@@ -16,7 +16,6 @@ class PieceRequest:
     """
     piece: 'AbstractPiece' = None
     oppoonent_pieces: List['AbstractPiece'] = field(default_factory=list)
-    castle_rooks: Dict[int, 'AbstractPiece'] = field(default_factory=dict)
     moves: List[Optional[int]] = field(default_factory=list)
     attacks: List[Optional[int]] = field(default_factory=list)
     move_from_position: List[int] = field(default_factory=list)
@@ -80,18 +79,6 @@ class PieceRequest:
         if self.oppoonent_pieces:
             if not is_instance_list(self.oppoonent_pieces, AbstractPiece):
                 raise PieceRequestError(f"opponent piece is not an AbstractPieces")
-
-        # validate castle_rooks
-        if self.castle_rooks:
-            for piece_position, piece in self.castle_rooks.items():
-                if not isinstance(piece, AbstractPiece):
-                    raise PieceRequestError(f"piece in castle_rooks {piece} is not an AbstractPieces")
-                if not isinstance(piece_position, int):
-                    raise PieceRequestError("piece_id in castle_rooks is not and integer")
-                try:
-                    Position(piece_position)
-                except PositionError as e:
-                    raise PieceRequestError("piece_id in castle_rooks is not valid position") from e
 
         # validate moves
         if self.moves and not is_instance_list(self.moves, int):

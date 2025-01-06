@@ -1,6 +1,6 @@
 from core import Chess
 from core import (AbstractPiece, PieceRequest, Position, HistoryTurn, MoveStatus, Pawn, Queen, Bishop, Rook, Knight)
-from typing import Union, List, Optional
+from typing import Union, List, Optional, Tuple
 import threading
 import tkinter
 import functools
@@ -99,7 +99,12 @@ class WindowsGui:
             self.set_data_to_null()
             if cmd_request.piece is not None:
                 self.set_moves_attacks(cmd_request.piece)
-                self.set_piece_move(self.data, cmd_request.destination_move_position, is_attack=cmd_request.is_attack)
+                self.set_piece_move(
+                    self.data,
+                    cmd_request.destination_move_position,
+                    is_attack=cmd_request.is_attack,
+                )
+                self.set_chess_board_colors()
             else:
                 print("invalid input")
 
@@ -152,8 +157,6 @@ class WindowsGui:
             self.chess.check_position = None
             self.chess.Which_piece_has_checked = None
 
-        self.change_piece_position_in_board(piece, last_cell_id, current_cell_id)
-
         is_small_castling = False
         is_big_castling = False
 
@@ -166,18 +169,10 @@ class WindowsGui:
             elif pawn.color == "white" and pawn.position.x == 8:
                 self.upgrade_pawn(pawn)
 
-        if piece_request.is_small_castling or piece_request.is_big_castling:
-            try:
-                rook = piece_request.castle_rooks[cell_id + 1]
-            except KeyError:
-                rook = piece_request.castle_rooks[cell_id - 2]
-            rook_position = rook.position.get_real_position()
-            if rook.direction.get() == "right":
-                is_small_castling = True
-                self.change_piece_position_in_board(rook, rook_position, rook_position - 2)
-            elif rook.direction.get() == "left":
-                is_big_castling = True
-                self.change_piece_position_in_board(rook, rook_position, rook_position + 3)
+        is_small_castling, is_big_castling = (
+            self.king_castle(cell_id, piece_request.is_small_castling, piece_request.is_big_castling)
+        )
+        self.change_piece_position_in_board(piece, last_cell_id, current_cell_id)
 
         if self.chess.opponent_is_check():
             self.chess.is_check = True
@@ -203,6 +198,26 @@ class WindowsGui:
         self.set_data_to_null()
         if increase_turn:
             self.chess.turn.increase_turn()
+
+    def king_castle(self, cell_id,  is_small_castling: bool = False, is_big_castling: bool = False) -> Tuple:
+        if is_small_castling or is_big_castling:
+            if cell_id == self.chess.get_own_king().position.get_real_position() + 2:
+                rook = self.chess.board.get_all_pieces()[cell_id + 1]
+            elif cell_id == self.chess.get_own_king().position.get_real_position() - 2:
+                rook = self.chess.board.get_all_pieces()[cell_id - 2]
+            else:
+                rook = None
+
+            if rook is not None:
+                rook_position = rook.position.get_real_position()
+                if rook.direction.get() == "right":
+                    is_small_castling = True
+                    self.change_piece_position_in_board(rook, rook_position, rook_position - 2)
+                elif rook.direction.get() == "left":
+                    is_big_castling = True
+                    self.change_piece_position_in_board(rook, rook_position, rook_position + 3)
+
+        return is_small_castling, is_big_castling
 
     def upgrade_pawn(self, pawn):
         self.chess.game_start = False
