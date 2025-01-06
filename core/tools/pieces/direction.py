@@ -12,6 +12,9 @@ class PieceDirection:
         # log
         core_logger.debug(f"PieceDirection {self.direction} initialised")
 
+    def get(self):
+        return self._direction
+
     @property
     def direction(self) -> str:
         return self._direction

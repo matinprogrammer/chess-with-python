@@ -16,7 +16,7 @@ class PieceRequest:
     """
     piece: 'AbstractPiece' = None
     oppoonent_pieces: List['AbstractPiece'] = field(default_factory=list)
-    castle_rooks: Union[None, Dict[int, 'AbstractPiece']] = None
+    castle_rooks: Dict[int, 'AbstractPiece'] = field(default_factory=dict)
     moves: List[Optional[int]] = field(default_factory=list)
     attacks: List[Optional[int]] = field(default_factory=list)
     move_from_position: List[int] = field(default_factory=list)
@@ -145,6 +145,11 @@ class PieceRequest:
 
             if isinstance(value_, list):
                 value_.extend(getattr(other, property_))
+                setattr(self, property_, value_)
+
+            if isinstance(value_, dict):
+                for k, v in getattr(other, property_).items():
+                    value_[k] = v
                 setattr(self, property_, value_)
 
             if isinstance(value_, bool):

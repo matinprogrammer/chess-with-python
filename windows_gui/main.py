@@ -75,6 +75,9 @@ class WindowsGui:
             if result is not None:
                 print(result)
 
+            if not self.chess.game_start:
+                print("game is stop")
+
             user_input = input(">> ")
 
             if user_input == "q":
@@ -87,6 +90,9 @@ class WindowsGui:
             try:
                 cmd_request: CmdRequest = CmdHandler(user_input).get_piece_move_with_code(self.chess)
             except (InvalidMove, InvalidAlgebraicNotation) as e:
+                print(str(e))
+                continue
+            except Exception as e:
                 print(str(e))
                 continue
 
@@ -166,11 +172,10 @@ class WindowsGui:
             except KeyError:
                 rook = piece_request.castle_rooks[cell_id - 2]
             rook_position = rook.position.get_real_position()
-
-            if rook.direction == "right":
+            if rook.direction.get() == "right":
                 is_small_castling = True
                 self.change_piece_position_in_board(rook, rook_position, rook_position - 2)
-            elif rook.direction == "left":
+            elif rook.direction.get() == "left":
                 is_big_castling = True
                 self.change_piece_position_in_board(rook, rook_position, rook_position + 3)
 

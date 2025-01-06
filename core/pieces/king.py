@@ -54,17 +54,17 @@ class King(AbstractPiece):
                     break
 
         # castling
-        if not self.is_move:
+        if not self.is_move.get():
             right_rook = pieces.get(king_real_position + 3)
             left_rook = pieces.get(king_real_position - 4)
 
-            if isinstance(right_rook, Rook) and not right_rook.is_move:
+            if isinstance(right_rook, Rook) and not right_rook.is_move.get():
                 if pieces.get(king_real_position + 1) is None and pieces.get(king_real_position + 2) is None:
                     moves.append(king_real_position + 2)
                     rooks[right_rook.position.get_real_position()] = right_rook
                     is_small_castling = True
 
-            if isinstance(left_rook, Rook) and not left_rook.is_move:
+            if isinstance(left_rook, Rook) and not left_rook.is_move.get():
                 if (
                         pieces.get(king_real_position - 1) is None
                         and pieces.get(king_real_position - 2) is None
@@ -74,7 +74,6 @@ class King(AbstractPiece):
                     rooks[left_rook.position.get_real_position()] = left_rook
                     is_big_castling = True
         # end castling
-
         return PieceRequest(
             piece=self,
             is_small_castling=is_small_castling,
