@@ -139,9 +139,6 @@ class WindowsGui:
 
             last_cell_id: int = piece_request.attack_from_to_position[witch_move][0]
             current_cell_id: int = piece_request.attacks[witch_move]
-            self.remove_piece_from_board(piece_request.attack_from_to_position[witch_move][1])
-
-            piece_request.oppoonent_pieces[witch_move].is_killed.set(True)
         else:
             witch_move = piece_request.moves.index(cell_id)
 
@@ -156,6 +153,10 @@ class WindowsGui:
             self.chess.is_check = False
             self.chess.check_position = None
             self.chess.Which_piece_has_checked = None
+
+        if is_attack:
+            piece_request.oppoonent_pieces[witch_move].is_killed.set(True)
+            self.remove_piece_from_board(piece_request.attack_from_to_position[witch_move][1])
 
         is_small_castling = False
         is_big_castling = False
