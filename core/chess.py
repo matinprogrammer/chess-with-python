@@ -43,9 +43,17 @@ class Chess:
             return self.board.pw_king
 
     def get_is_check_with_piece_move(self, piece: AbstractPiece, move_cell_id: int) -> bool:
+        under_attack_piece = self.board.get_all_pieces().get(move_cell_id)
+        if under_attack_piece is not None:
+            under_attack_piece.is_killed.set(True)
+
         piece.move(move_cell_id)
-        is_check: bool = self.get_is_check(self.get_own_king())
+
+        is_check: bool = self.own_is_check()
+
         piece.position.return_to_last_position()
+        if under_attack_piece is not None:
+            under_attack_piece.is_killed.set(False)
         return is_check
 
     def own_is_check(self) -> bool:

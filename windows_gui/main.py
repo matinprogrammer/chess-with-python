@@ -78,7 +78,7 @@ class WindowsGui:
             if not self.chess.game_start:
                 print("game is stop")
 
-            user_input = input(">> ")
+            user_input = input(">>> ")
 
             if user_input == "q":
                 self.window.destroy()
@@ -158,9 +158,6 @@ class WindowsGui:
             piece_request.oppoonent_pieces[witch_move].is_killed.set(True)
             self.remove_piece_from_board(piece_request.attack_from_to_position[witch_move][1])
 
-        is_small_castling = False
-        is_big_castling = False
-
         if hasattr(piece, "is_move"):
             piece.is_move.set(True)
 
@@ -181,6 +178,7 @@ class WindowsGui:
             if self.chess.opponent_is_check_mate():
                 self.chess.is_check_mate = True
                 self.chess.game_start = False
+                print("game over 'ctrl-r' or run 'r' in cmd to restart\n>>> ", end="")
 
         self.chess.history.append(
             HistoryTurn(
