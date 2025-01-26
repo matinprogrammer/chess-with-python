@@ -164,16 +164,16 @@ class WindowsGui:
         if hasattr(piece, "is_move"):
             piece.is_move.set(True)
 
-        if isinstance(pawn := piece, Pawn):
-            if pawn.color == "black" and pawn.position.x == 1:
-                self.upgrade_pawn(pawn)
-            elif pawn.color == "white" and pawn.position.x == 8:
-                self.upgrade_pawn(pawn)
-
         is_small_castling, is_big_castling = (
             self.king_castle(cell_id, piece_request.is_small_castling, piece_request.is_big_castling)
         )
         self.change_piece_position_in_board(piece, last_cell_id, current_cell_id)
+
+        if isinstance(pawn := piece, Pawn):
+            if pawn.color.get() == "black" and pawn.position.x == 1:
+                self.upgrade_pawn(pawn)
+            elif pawn.color.get() == "white" and pawn.position.x == 8:
+                self.upgrade_pawn(pawn)
 
         if self.chess.opponent_is_check():
             self.chess.is_check = True
@@ -228,10 +228,10 @@ class WindowsGui:
         board_popup = tkinter.Frame(popup)
         board_popup.grid(row=0, column=0)
         list_on_piece = [
-            Bishop(pawn.color, pawn.position.x, pawn.position.y, None),
-            Knight(pawn.color, pawn.position.x, pawn.position.y, None),
-            Rook(pawn.color, pawn.position.x, pawn.position.y, None),
-            Queen(pawn.color, pawn.position.x, pawn.position.y, None)
+            Bishop(pawn.color.get(), pawn.position.x, pawn.position.y, None),
+            Knight(pawn.color.get(), pawn.position.x, pawn.position.y, None),
+            Rook(pawn.color.get(), pawn.position.x, pawn.position.y, None),
+            Queen(pawn.color.get(), pawn.position.x, pawn.position.y, None)
         ]
         for index, piece in enumerate(list_on_piece):
             label = ChessLabel(0, popup)
