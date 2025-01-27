@@ -11,4 +11,5 @@ run in chess folder, windows: ` python main.py `, linux: ```python3 main.py```
 ## how to use
 * you can use gui and click on pieces and move it
 * or you can use cmd/terminal and enter a **Algebraic chess notation** to move piece.
+
 example: `pc4`
