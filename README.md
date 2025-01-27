@@ -1,7 +1,7 @@
 # chess 
 the simple chess that created by python and tkinter for windows
 
-you can use the ./core and create another gui
+you can use the`./core` and create another gui
 ## requirement
 just need to install python3
 ## instalation
