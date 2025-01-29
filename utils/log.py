@@ -31,9 +31,15 @@ class CustomLogger(logging.Logger):
 
 def create_logger(name: str, path: str, *, file_level=logging.DEBUG, console_level=logging.WARNING,
                   logger_level=logging.DEBUG) -> logging.Logger:
+    try:
+        with open(path, "a") as f:
+            f.write("\n" + "-" * 60 + "\n")
+    except FileNotFoundError:
+        os.makedirs("logs")
+        with open(path, "w") as f:
+            f.write("")
+
     file_handler = logging.FileHandler(path)
-    with open(path, "a") as f:
-        f.write("\n" + "-" * 60 + "\n")
     file_handler.setLevel(file_level)  # Log all levels to the file
     file_formatter = CustomFormatter(
         '%(asctime)s - %(filename)s - %(name)s - %(levelname)s - %(message)s',
